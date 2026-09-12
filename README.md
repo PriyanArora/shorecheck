@@ -59,7 +59,7 @@ flowchart TB
   weather --> weatherlib --> eccc
   predict --> weatherlib & predictlib & data
   sightings --> ns
-  hugoapi --> data --> gemini
+  hugoapi --> data & gemini
   dash --> lakeslib
 ```
 
