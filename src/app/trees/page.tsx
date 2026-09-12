@@ -157,7 +157,11 @@ export default function TreesPage() {
                 <CardDescription className="text-[12px] font-medium text-[#86868b]">{k}</CardDescription>
               </CardHeader>
               <CardContent className="px-5">
-                {v === null ? <Skeleton className="h-8 w-20" /> : <p className="tabular-nums text-[28px] font-semibold tracking-tight text-white">{v}</p>}
+                {v === null && !error ? (
+                  <Skeleton className="h-8 w-20" />
+                ) : (
+                  <p className="tabular-nums text-[28px] font-semibold tracking-tight text-white">{v ?? "—"}</p>
+                )}
               </CardContent>
             </Card>
           ))}
