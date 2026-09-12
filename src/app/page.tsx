@@ -36,13 +36,13 @@ export default function Landing() {
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-black/40 via-transparent to-black" />
 
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[13px] font-semibold tracking-[0.18em] text-white/60 uppercase">
+          <p className="text-[13px] font-semibold tracking-[0.18em] text-[#a1a1a6]">
             Halifax Regional Municipality
           </p>
           <h1 className="mt-4 text-6xl font-bold tracking-[-0.03em] text-white sm:text-7xl lg:text-8xl">
             ShoreCheck
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-lg leading-snug font-light text-white/85 sm:text-2xl">
+          <p className="mx-auto mt-5 max-w-xl text-[21px] leading-[1.19] text-[#f5f5f7]/90 sm:text-[28px]">
             <TextGenerate
               words="Official beach tests. A rain-driven prediction you can check against them. A satellite watch on the lakes nobody tests."
               delay={0.2}
@@ -59,7 +59,7 @@ export default function Landing() {
               Run a prediction
             </Link>
           </div>
-          <p className="mt-8 text-[13px] text-white/55">
+          <p className="mt-8 text-[13px] text-[#86868b]">
             Right now: {counts.open} open · {counts.advisory} on advisory · {counts.closed} closed ·
             season testing ended Aug 31
           </p>
@@ -70,13 +70,13 @@ export default function Landing() {
       <section className="relative overflow-hidden bg-black px-6 py-24 sm:py-32">
         <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" />
         <div className="mx-auto max-w-6xl">
-          <p className="text-[13px] font-semibold tracking-[0.18em] text-white/50 uppercase">
+          <p className="text-[19px] font-semibold text-[#86868b]">
             What you get
           </p>
-          <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.02em] text-white sm:text-5xl">
+          <h2 className="mt-3 max-w-2xl text-[40px] leading-[1.1] font-semibold tracking-[-0.003em] text-[#f5f5f7] sm:text-[56px]">
             Four signals. Each one dated.
           </h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed font-light text-white/65">
+          <p className="mt-4 max-w-2xl text-[21px] leading-[1.38] text-[#86868b]">
             Nothing here is interpolated or guessed between readings. Every number carries the
             time it was taken, so you can decide how much to trust it.
           </p>
@@ -91,8 +91,8 @@ export default function Landing() {
                 <ul className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-black/40">
                   {BEACHES.slice(2, 5).map((b) => (
                     <li key={b.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
-                      <span className="truncate text-sm text-white/85">{b.name}</span>
-                      <span className="hidden font-mono text-[11px] text-white/45 sm:inline">
+                      <span className="truncate text-sm text-[#f5f5f7]">{b.name}</span>
+                      <span className="hidden tabular-nums text-[11px] text-[#86868b] sm:inline">
                         {b.result}
                       </span>
                       <StatusBadge status={b.status} short />
@@ -107,12 +107,12 @@ export default function Landing() {
               description="48-hour rainfall at Halifax Stanfield, thresholded per water type. Scored against every official sample so you can see how often it is right."
               header={
                 <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-                  <p className="font-mono text-[11px] text-white/45">lake · ocean thresholds</p>
+                  <p className="tabular-nums text-[11px] text-[#86868b]">lake · ocean thresholds</p>
                   <p className="mt-2 text-3xl font-semibold tracking-tight text-white">
-                    10 <span className="text-white/40">/</span> 25
-                    <span className="ml-3 text-base font-normal text-white/50">mm</span>
+                    10 <span className="text-[#86868b]">/</span> 25
+                    <span className="ml-3 text-base font-normal text-[#86868b]">mm</span>
                   </p>
-                  <p className="mt-1 text-[12px] text-white/55">advisory / closed, lake beaches</p>
+                  <p className="mt-1 text-[12px] text-[#86868b]">advisory / closed, lake beaches</p>
                 </div>
               }
             />
@@ -122,9 +122,9 @@ export default function Landing() {
               description="Sentinel-2 index per lake, median 10 days between clear looks. Shown as the date of the last clear look, never as a live reading."
               header={
                 <div className="rounded-2xl border border-white/10 bg-black/40 p-4">
-                  <p className="font-mono text-[11px] text-white/45">last clear look</p>
+                  <p className="tabular-nums text-[11px] text-[#86868b]">last clear look</p>
                   <p className="mt-2 text-3xl font-semibold tracking-tight text-white">Sep 11</p>
-                  <p className="mt-1 text-[12px] text-white/55">Lake Echo · others Aug 30</p>
+                  <p className="mt-1 text-[12px] text-[#86868b]">Lake Echo · others Aug 30</p>
                 </div>
               }
             />
@@ -166,18 +166,18 @@ export default function Landing() {
             ],
           ].map(([h, p]) => (
             <div key={h}>
-              <h3 className="text-[13px] font-semibold tracking-[0.18em] text-white/50 uppercase">
+              <h3 className="text-[19px] font-semibold text-[#86868b]">
                 {h}
               </h3>
-              <p className="mt-3 text-[15px] leading-relaxed text-white/75">{p}</p>
+              <p className="mt-3 text-[15px] leading-relaxed text-[#d2d2d7]">{p}</p>
             </div>
           ))}
         </div>
       </section>
 
       <footer className="border-t border-white/10 bg-black px-6 py-8">
-        <p className="mx-auto max-w-6xl text-[12px] text-white/40">
-          Map data © OpenStreetMap contributors, tiles © CARTO. Weather © Environment and Climate
+        <p className="mx-auto max-w-6xl text-[12px] text-[#86868b]">
+          Map data © OpenStreetMap contributors. Weather © Environment and Climate
           Change Canada. Built at a Halifax hackathon.
         </p>
       </footer>

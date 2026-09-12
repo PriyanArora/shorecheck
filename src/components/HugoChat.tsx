@@ -6,6 +6,18 @@ import { BEACHES, EVENTS, type Beach } from "@/lib/data";
 
 type Msg = { id: number; from: "hugo" | "me"; text: string; beach?: Beach };
 
+/** Hardcoded starters; each one is answered by Gemini with the live beach data. */
+const SUGGESTIONS = [
+  "Somewhere peaceful",
+  "Somewhere happening",
+  "Best beach for kids today?",
+  "Where can I surf this weekend?",
+  "Which beaches are closed and why?",
+  "Closest clean beach to downtown?",
+  "What's on near the beaches this weekend?",
+  "Warmest ocean swim near the city?",
+];
+
 const OPENER: Msg = {
   id: 0,
   from: "hugo",
@@ -73,21 +85,49 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
   const [chips, setChips] = useState(true);
   const [typing, setTyping] = useState(false);
   const end = useRef<HTMLDivElement>(null);
+  const seq = useRef(1);
+  const nextId = () => ++seq.current;
 
   useEffect(() => {
     end.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [msgs, typing]);
 
-  const send = (text: string) => {
-    if (!text.trim()) return;
+  const send = async (text: string) => {
+    if (!text.trim() || typing) return;
     setChips(false);
     setDraft("");
-    setMsgs((m) => [...m, { id: Date.now(), from: "me", text }]);
+    const history = [...msgs, { id: nextId(), from: "me" as const, text }];
+    setMsgs(history);
     setTyping(true);
-    setTimeout(() => {
-      setTyping(false);
+    try {
+      const r = await fetch("/api/hugo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: history
+            .filter((m) => m.id !== 0)
+            .map((m) => ({ role: m.from === "me" ? "user" : "model", text: m.text })),
+        }),
+      });
+      if (!r.ok) throw new Error(String(r.status));
+      const j = (await r.json()) as { text: string; beachId: string | null };
+      if (!j.text) throw new Error("empty");
+      const id = nextId();
+      setMsgs((m) => [
+        ...m,
+        {
+          id,
+          from: "hugo",
+          text: j.text,
+          beach: j.beachId ? BEACHES.find((b) => b.id === j.beachId) : undefined,
+        },
+      ]);
+    } catch {
+      // Gemini unavailable: fall back to the keyword matcher over the same data
       setMsgs((m) => [...m, reply(text)]);
-    }, 700);
+    } finally {
+      setTyping(false);
+    }
   };
 
   const body = compact ? "text-[13px]" : "text-[15px]";
@@ -105,7 +145,7 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
                 H
               </span>
               <div className="max-w-[85%]">
-                <p className="text-[10px] font-semibold text-white/50">Hugo</p>
+                <p className="text-[10px] font-semibold text-[#86868b]">Hugo</p>
                 <div
                   className={`mt-1 rounded-2xl rounded-tl-sm bg-[#1d1d1f] px-3 py-2 leading-snug text-[#f5f5f7] ring-1 ring-white/10 ${body}`}
                 >
@@ -117,10 +157,10 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
                     <p className="mt-1.5 text-[13px] font-bold">
                       {m.beach.name}
                     </p>
-                    <p className="font-mono text-[10px] text-white/50">
+                    <p className="tabular-nums text-[10px] text-[#86868b]">
                       {m.beach.result}
                     </p>
-                    <p className="mt-1 text-[11px] leading-snug text-white/70">
+                    <p className="mt-1 text-[11px] leading-snug text-[#d2d2d7]">
                       {m.beach.plain}
                     </p>
                   </div>
@@ -140,7 +180,7 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
 
         {chips && (
           <div className="flex flex-wrap gap-2 pl-8">
-            {["Somewhere peaceful", "Somewhere happening"].map((c) => (
+            {SUGGESTIONS.map((c) => (
               <button
                 key={c}
                 onClick={() => send(c)}
@@ -153,10 +193,26 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
         )}
 
         {typing && (
-          <p className="pl-8 text-[11px] text-white/40">Hugo is typing…</p>
+          <p className="pl-8 text-[11px] text-[#86868b]">Hugo is typing…</p>
         )}
         <div ref={end} />
       </div>
+
+      {!chips && (
+        <div className="flex gap-2 overflow-x-auto px-3 pb-2 [scrollbar-width:none]">
+          {SUGGESTIONS.slice(2).map((c) => (
+            <button
+              key={c}
+              type="button"
+              onClick={() => send(c)}
+              disabled={typing}
+              className="shrink-0 rounded-full bg-white/10 px-3 py-1 text-[12px] font-medium text-white/80 ring-1 ring-white/10 hover:bg-white/20 disabled:opacity-40"
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
 
       <form
         onSubmit={(e) => {
@@ -168,9 +224,9 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Ask Hugo anything…"
+          placeholder="Ask Hugo about a beach…"
           aria-label="Message Hugo"
-          className={`min-w-0 flex-1 rounded-full bg-[#1d1d1f] px-3 py-2 text-white ring-1 ring-white/10 outline-none placeholder:text-white/40 focus:ring-white/40 ${body}`}
+          className={`min-w-0 flex-1 rounded-full bg-[#1d1d1f] px-3 py-2 text-white ring-1 ring-white/10 outline-none placeholder:text-[#86868b] focus:ring-white/40 ${body}`}
         />
         <button
           type="submit"

@@ -23,7 +23,7 @@ export function StatusMark({
   return (
     <span
       aria-hidden
-      className={`inline-flex shrink-0 items-center justify-center font-mono font-bold text-white ${size} ${text} ${s.dot} ${SHAPE[status]}`}
+      className={`inline-flex shrink-0 items-center justify-center tabular-nums font-bold text-white ${size} ${text} ${s.dot} ${SHAPE[status]}`}
     >
       {s.glyph}
     </span>
@@ -34,7 +34,7 @@ export function StatusChip({ status }: { status: Status }) {
   const s = STATUS[status];
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 font-mono text-[11px] font-bold tracking-wide uppercase ${s.chip}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-1 tabular-nums text-[11px] font-bold tracking-wide ${s.chip}`}
     >
       <StatusMark status={status} size="size-3.5" text="text-[9px]" />
       {s.label}

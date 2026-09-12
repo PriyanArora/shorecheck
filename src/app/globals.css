@@ -6,8 +6,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: var(--font-sans-local), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono-local), ui-monospace, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", var(--font-sans-local), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-sans-local), "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -75,7 +75,7 @@
   --secondary: #2c2c2e;
   --secondary-foreground: #f5f5f7;
   --muted: #2c2c2e;
-  --muted-foreground: #a1a1a6;
+  --muted-foreground: #86868b;
   --accent: #2c2c2e;
   --accent-foreground: #f5f5f7;
   --destructive: oklch(0.704 0.191 22.216);
@@ -117,6 +117,10 @@
 .leaflet-container {
   font-family: var(--font-sans);
   background: #0a0a0a;
+}
+/* OSM tiles, keyless, pushed to black and grey */
+.leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) grayscale(1) brightness(0.72) contrast(1.05);
 }
 .leaflet-popup-content-wrapper {
   border-radius: 1rem;

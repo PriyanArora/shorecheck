@@ -57,13 +57,13 @@ export default function Dashboard() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 pt-28 pb-24">
         <header className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="text-[13px] font-semibold tracking-[0.18em] text-white/50 uppercase">
+            <p className="text-[19px] font-semibold text-[#86868b]">
               Today · Sep 12
             </p>
-            <h1 className="mt-2 text-5xl font-semibold tracking-[-0.03em] text-white sm:text-6xl">
+            <h1 className="mt-2 text-[44px] leading-[1.08] font-semibold tracking-[-0.003em] text-[#f5f5f7] sm:text-[56px]">
               Beaches
             </h1>
-            <p className="mt-3 max-w-xl text-[17px] leading-snug font-light text-white/65">
+            <p className="mt-3 max-w-xl text-[21px] leading-[1.19] tracking-[0.011em] text-[#86868b]">
               The most recent official sample at every supervised beach. Season testing ended
               Aug 31, so the latest reading is the ruling until next July.
             </p>
@@ -71,19 +71,19 @@ export default function Dashboard() {
 
           <Card className="w-full max-w-sm gap-2 border-white/10 bg-[#1d1d1f] py-4">
             <CardHeader className="px-5">
-              <CardDescription className="text-[11px] font-semibold tracking-[0.14em] text-white/45 uppercase">
+              <CardDescription className="text-[12px] font-medium text-[#86868b]">
                 Bloom conditions · regional heuristic
               </CardDescription>
-              <CardTitle className="text-2xl font-semibold tracking-tight text-white">
+              <CardTitle className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">
                 {weather ? BLOOM[weather.label] : <Skeleton className="h-7 w-24" />}
               </CardTitle>
             </CardHeader>
-            <CardContent className="px-5 text-[13px] text-white/60">
+            <CardContent className="px-5 text-[13px] text-[#a1a1a6]">
               {weather ? (
                 <>
                   {weather.rain48} mm rain after {weather.dryRunBefore} dry days
                   {weather.tmaxDry !== null ? `, high ${weather.tmaxDry}°` : ""}
-                  <span className="mt-1 block font-mono text-[11px] text-white/40">
+                  <span className="mt-1 block tabular-nums text-[11px] text-[#86868b]">
                     Halifax Stanfield · updated {hhmm(weather.fetchedAt)}
                   </span>
                 </>
@@ -99,13 +99,13 @@ export default function Dashboard() {
           {ORDER.map((s) => (
             <Card key={s} className="gap-1 border-white/10 bg-[#1d1d1f] py-4">
               <CardHeader className="px-5">
-                <CardDescription className="flex items-center gap-2 text-[12px] text-white/55">
+                <CardDescription className="flex items-center gap-2 text-[12px] text-[#86868b]">
                   <StatusBadge status={s} short />
                 </CardDescription>
               </CardHeader>
               <CardContent className="px-5">
                 <p className="text-4xl font-semibold tracking-tight text-white">{counts[s]}</p>
-                <p className="mt-0.5 text-[12px] text-white/45">
+                <p className="mt-0.5 text-[12px] text-[#86868b]">
                   of {BEACHES.length} beaches
                 </p>
               </CardContent>
@@ -118,7 +118,7 @@ export default function Dashboard() {
           <div className="overflow-hidden rounded-3xl border border-white/10">
             <MapView />
           </div>
-          <p className="mt-2 text-[12px] text-white/40">
+          <p className="mt-2 text-[12px] text-[#86868b]">
             Beach markers use shape and colour. Lake outlines: white for a satellite series
             within its baseline, amber for an unvalidated anomaly, dashed for lakes with no
             series. Click anything for the dated detail.
@@ -127,8 +127,8 @@ export default function Dashboard() {
 
         {/* table */}
         <section className="mt-16">
-          <h2 className="text-2xl font-semibold tracking-tight text-white">Every beach</h2>
-          <p className="mt-1 text-[14px] text-white/55">
+          <h2 className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">Every beach</h2>
+          <p className="mt-1 text-[17px] leading-[1.47] text-[#86868b]">
             Sorted as the map shows them. Results are the raw count from the lab.
           </p>
           <Card className="mt-5 border-white/10 bg-[#1d1d1f] py-0">
@@ -138,7 +138,7 @@ export default function Dashboard() {
                   {["Beach", "Water", "Status", "Result", "Sampled"].map((h) => (
                     <TableHead
                       key={h}
-                      className="h-11 px-5 text-[11px] font-semibold tracking-[0.12em] text-white/45 uppercase"
+                      className="h-11 px-5 text-[12px] font-medium text-[#86868b]"
                     >
                       {h}
                     </TableHead>
@@ -151,16 +151,16 @@ export default function Dashboard() {
                     <TableCell className="px-5 py-3.5 text-[14px] font-medium text-white">
                       {b.name}
                     </TableCell>
-                    <TableCell className="px-5 text-[13px] text-white/60 capitalize">
+                    <TableCell className="px-5 text-[13px] text-[#a1a1a6] capitalize">
                       {b.water}
                     </TableCell>
                     <TableCell className="px-5">
                       <StatusBadge status={b.status} short />
                     </TableCell>
-                    <TableCell className="px-5 font-mono text-[12px] text-white/70">
+                    <TableCell className="px-5 tabular-nums text-[12px] text-[#d2d2d7]">
                       {b.result}
                     </TableCell>
-                    <TableCell className="px-5 font-mono text-[12px] text-white/45">
+                    <TableCell className="px-5 tabular-nums text-[12px] text-[#86868b]">
                       {b.sampled.replace(/^(Last )?[Ss]ampled /, "")}
                     </TableCell>
                   </TableRow>
@@ -172,8 +172,8 @@ export default function Dashboard() {
 
         {/* lakes */}
         <section className="mt-16">
-          <h2 className="text-2xl font-semibold tracking-tight text-white">Lake watch</h2>
-          <p className="mt-1 max-w-2xl text-[14px] text-white/55">
+          <h2 className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">Lake watch</h2>
+          <p className="mt-1 max-w-2xl text-[17px] leading-[1.47] text-[#86868b]">
             Eight lakes have a Sentinel-2 index series. The value is compared with the lake&apos;s
             own baseline. Unvalidated, and not a safety rating. The rest of the 43 are on the
             map with their reported-sighting history only.
@@ -192,11 +192,11 @@ export default function Dashboard() {
                         <CardTitle className="text-[15px] font-semibold text-white">
                           {l.name}
                         </CardTitle>
-                        <CardDescription className="text-[12px] text-white/50">
+                        <CardDescription className="text-[12px] text-[#86868b]">
                           {s.flag ? "unvalidated anomaly" : "within baseline"}
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="px-5 font-mono text-[11px] text-white/45">
+                      <CardContent className="px-5 tabular-nums text-[11px] text-[#86868b]">
                         last clear look {s.last_clear_date}
                       </CardContent>
                     </Card>
@@ -207,8 +207,8 @@ export default function Dashboard() {
 
         {/* events */}
         <section className="mt-16">
-          <h2 className="text-2xl font-semibold tracking-tight text-white">Happening nearby</h2>
-          <p className="mt-1 text-[14px] text-white/55">
+          <h2 className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">Happening nearby</h2>
+          <p className="mt-1 text-[17px] leading-[1.47] text-[#86868b]">
             {EVENTS.length} events this week, each tied to a tested beach.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -217,7 +217,7 @@ export default function Dashboard() {
               return (
                 <Card key={e.id} className="gap-2 border-white/10 bg-[#1d1d1f] py-5">
                   <CardHeader className="px-5">
-                    <CardDescription className="font-mono text-[11px] text-white/45">
+                    <CardDescription className="tabular-nums text-[11px] text-[#86868b]">
                       {e.when} · {e.time}
                     </CardDescription>
                     <CardTitle className="text-[16px] font-semibold text-white">
@@ -225,8 +225,8 @@ export default function Dashboard() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="px-5">
-                    <p className="text-[13px] leading-snug text-white/65">{e.blurb}</p>
-                    <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/10 pt-3 text-[12px] text-white/50">
+                    <p className="text-[13px] leading-snug text-[#a1a1a6]">{e.blurb}</p>
+                    <div className="mt-3 flex items-center justify-between gap-2 border-t border-white/10 pt-3 text-[12px] text-[#86868b]">
                       <span className="truncate">
                         {e.near} · {e.price}
                       </span>
@@ -239,9 +239,9 @@ export default function Dashboard() {
           </div>
         </section>
 
-        <p className="mt-16 text-[12px] text-white/35">
+        <p className="mt-16 text-[12px] text-[#6e6e73]">
           Status words: {ORDER.map((s) => STATUS[s].label).join(" · ")}. Map data ©
-          OpenStreetMap contributors, tiles © CARTO.
+          OpenStreetMap contributors.
         </p>
       </main>
     </>

@@ -19,7 +19,7 @@ import { hhmm } from "@/lib/lakes";
 import { THRESHOLDS, type PredictPayload } from "@/lib/predict";
 
 const th =
-  "h-11 px-5 text-[11px] font-semibold tracking-[0.12em] text-white/45 uppercase";
+  "h-11 px-5 text-[12px] font-medium text-[#86868b]";
 
 export default function PredictPage() {
   const [data, setData] = useState<PredictPayload | null>(null);
@@ -45,13 +45,13 @@ export default function PredictPage() {
       <Nav />
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 pt-28 pb-24">
         <header className="max-w-2xl">
-          <p className="text-[13px] font-semibold tracking-[0.18em] text-white/50 uppercase">
+          <p className="text-[19px] font-semibold text-[#86868b]">
             Prediction
           </p>
-          <h1 className="mt-2 text-5xl font-semibold tracking-[-0.03em] text-white sm:text-6xl">
+          <h1 className="mt-2 text-[44px] leading-[1.08] font-semibold tracking-[-0.003em] text-[#f5f5f7] sm:text-[56px]">
             Rain in, status out.
           </h1>
-          <p className="mt-4 text-[17px] leading-snug font-light text-white/65">
+          <p className="mt-4 text-[21px] leading-[1.19] tracking-[0.011em] text-[#86868b]">
             Beach bacteria follow runoff. The model takes rainfall over the last 48 hours at
             Halifax Stanfield and turns it into a predicted status per water type. Then it
             scores itself against every official sample, so you can see how often it is right
@@ -67,7 +67,7 @@ export default function PredictPage() {
               {busy ? "Fetching weather…" : data ? "Run again" : "Predict beaches now"}
             </Button>
             {data && (
-              <span className="font-mono text-[12px] text-white/45">
+              <span className="tabular-nums text-[12px] text-[#86868b]">
                 weather as of {data.asOf ?? "n/a"} · fetched {hhmm(data.fetchedAt)}
               </span>
             )}
@@ -78,7 +78,7 @@ export default function PredictPage() {
         {/* rule */}
         <Card className="mt-12 border-white/10 bg-[#1d1d1f] py-5">
           <CardHeader className="px-6">
-            <CardDescription className="text-[11px] font-semibold tracking-[0.14em] text-white/45 uppercase">
+            <CardDescription className="text-[12px] font-medium text-[#86868b]">
               The rule
             </CardDescription>
             <CardTitle className="text-[17px] font-semibold text-white">
@@ -89,7 +89,7 @@ export default function PredictPage() {
             {(["lake", "ocean"] as const).map((w) => (
               <div key={w}>
                 <p className="text-[13px] font-medium text-white/80 capitalize">{w} beaches</p>
-                <dl className="mt-2 space-y-1 font-mono text-[12px] text-white/55">
+                <dl className="mt-2 space-y-1 tabular-nums text-[12px] text-[#86868b]">
                   <div className="flex justify-between">
                     <dt>under {THRESHOLDS[w].advisory} mm</dt>
                     <dd>
@@ -128,8 +128,8 @@ export default function PredictPage() {
           <>
             {/* right now */}
             <section className="mt-16">
-              <h2 className="text-2xl font-semibold tracking-tight text-white">Right now</h2>
-              <p className="mt-1 text-[14px] text-white/55">
+              <h2 className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">Right now</h2>
+              <p className="mt-1 text-[17px] leading-[1.47] text-[#86868b]">
                 From the last two complete days plus the station&apos;s 24-hour total when it is
                 newer.
               </p>
@@ -137,16 +137,16 @@ export default function PredictPage() {
                 {(["lake", "ocean"] as const).map((w) => (
                   <Card key={w} className="gap-2 border-white/10 bg-[#1d1d1f] py-5">
                     <CardHeader className="px-5">
-                      <CardDescription className="text-[11px] font-semibold tracking-[0.14em] text-white/45 uppercase">
+                      <CardDescription className="text-[12px] font-medium text-[#86868b]">
                         {w} beaches
                       </CardDescription>
                       <CardTitle className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-white">
                         <StatusBadge status={data.now[w].status} className="h-6 text-[13px]" />
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="px-5 text-[13px] text-white/60">
+                    <CardContent className="px-5 text-[13px] text-[#a1a1a6]">
                       {data.now[w].why}
-                      <span className="mt-1 block font-mono text-[11px] text-white/40">
+                      <span className="mt-1 block tabular-nums text-[11px] text-[#86868b]">
                         risk score {data.now[w].score} / 100
                       </span>
                     </CardContent>
@@ -154,17 +154,17 @@ export default function PredictPage() {
                 ))}
                 <Card className="gap-2 border-white/10 bg-[#1d1d1f] py-5">
                   <CardHeader className="px-5">
-                    <CardDescription className="text-[11px] font-semibold tracking-[0.14em] text-white/45 uppercase">
+                    <CardDescription className="text-[12px] font-medium text-[#86868b]">
                       Scored against official samples
                     </CardDescription>
                     <CardTitle className="text-3xl font-semibold tracking-tight text-white">
                       {data.accuracy.pct === null ? "n/a" : `${data.accuracy.pct}%`}
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="px-5 text-[13px] text-white/60">
+                  <CardContent className="px-5 text-[13px] text-[#a1a1a6]">
                     {data.accuracy.hits} of {data.accuracy.n} tested beaches matched on the day
                     they were sampled.
-                    <span className="mt-1 block font-mono text-[11px] text-white/40">
+                    <span className="mt-1 block tabular-nums text-[11px] text-[#86868b]">
                       {data.now.rain48} mm in 48 h · high {data.now.tmax ?? "n/a"}°
                     </span>
                   </CardContent>
@@ -174,10 +174,10 @@ export default function PredictPage() {
 
             {/* per beach */}
             <section className="mt-16">
-              <h2 className="text-2xl font-semibold tracking-tight text-white">
+              <h2 className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">
                 Prediction versus the test, beach by beach
               </h2>
-              <p className="mt-1 text-[14px] text-white/55">
+              <p className="mt-1 text-[17px] leading-[1.47] text-[#86868b]">
                 The prediction is recomputed for the day each beach was sampled, then compared
                 with what the lab found. Beaches whose season is over cannot be scored.
               </p>
@@ -199,14 +199,14 @@ export default function PredictPage() {
                       <TableRow key={b.id} className="border-white/10 hover:bg-white/[0.03]">
                         <TableCell className="px-5 py-3.5">
                           <p className="text-[14px] font-medium text-white">{b.name}</p>
-                          <p className="text-[11px] text-white/45 capitalize">{b.water}</p>
+                          <p className="text-[11px] text-[#86868b] capitalize">{b.water}</p>
                         </TableCell>
-                        <TableCell className="px-5 font-mono text-[12px] text-white/50">
+                        <TableCell className="px-5 tabular-nums text-[12px] text-[#86868b]">
                           {b.officialDate ?? "—"}
                         </TableCell>
                         <TableCell className="px-5">
                           <StatusBadge status={b.official} short />
-                          <p className="mt-1 font-mono text-[11px] text-white/40">
+                          <p className="mt-1 tabular-nums text-[11px] text-[#86868b]">
                             {b.officialResult}
                           </p>
                         </TableCell>
@@ -214,12 +214,12 @@ export default function PredictPage() {
                           {b.predictedOnSampleDay ? (
                             <StatusBadge status={b.predictedOnSampleDay} />
                           ) : (
-                            <span className="text-[12px] text-white/35">outside window</span>
+                            <span className="text-[12px] text-[#6e6e73]">outside window</span>
                           )}
                         </TableCell>
                         <TableCell className="px-5 text-[13px]">
                           {b.match === null ? (
-                            <span className="text-white/35">not scored</span>
+                            <span className="text-[#6e6e73]">not scored</span>
                           ) : b.match ? (
                             <span className="text-emerald-300">match</span>
                           ) : (
@@ -238,8 +238,8 @@ export default function PredictPage() {
 
             {/* previous days */}
             <section className="mt-16">
-              <h2 className="text-2xl font-semibold tracking-tight text-white">Previous days</h2>
-              <p className="mt-1 text-[14px] text-white/55">
+              <h2 className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">Previous days</h2>
+              <p className="mt-1 text-[17px] leading-[1.47] text-[#86868b]">
                 One prediction per complete weather day. Samples and hits count the official
                 results dated that day.
               </p>
@@ -257,16 +257,16 @@ export default function PredictPage() {
                   <TableBody>
                     {data.days.map((d) => (
                       <TableRow key={d.date} className="border-white/10 hover:bg-white/[0.03]">
-                        <TableCell className="px-5 py-3 font-mono text-[12px] text-white">
+                        <TableCell className="px-5 py-3 tabular-nums text-[12px] text-white">
                           {d.date}
                         </TableCell>
-                        <TableCell className="px-5 font-mono text-[12px] text-white/60">
+                        <TableCell className="px-5 tabular-nums text-[12px] text-[#a1a1a6]">
                           {d.precip} mm
                         </TableCell>
-                        <TableCell className="px-5 font-mono text-[12px] text-white/60">
+                        <TableCell className="px-5 tabular-nums text-[12px] text-[#a1a1a6]">
                           {d.rain48} mm
                         </TableCell>
-                        <TableCell className="px-5 font-mono text-[12px] text-white/60">
+                        <TableCell className="px-5 tabular-nums text-[12px] text-[#a1a1a6]">
                           {d.tmax ?? "—"}°
                         </TableCell>
                         <TableCell className="px-5">
@@ -275,10 +275,10 @@ export default function PredictPage() {
                         <TableCell className="px-5">
                           <StatusBadge status={d.ocean} />
                         </TableCell>
-                        <TableCell className="px-5 font-mono text-[12px] text-white/60">
+                        <TableCell className="px-5 tabular-nums text-[12px] text-[#a1a1a6]">
                           {d.samples || "—"}
                         </TableCell>
-                        <TableCell className="px-5 font-mono text-[12px] text-white/60">
+                        <TableCell className="px-5 tabular-nums text-[12px] text-[#a1a1a6]">
                           {d.samples ? d.hits : "—"}
                         </TableCell>
                       </TableRow>
@@ -289,7 +289,7 @@ export default function PredictPage() {
             </section>
 
             <Separator className="mt-16 bg-white/10" />
-            <p className="mt-6 max-w-2xl text-[12px] leading-relaxed text-white/40">
+            <p className="mt-6 max-w-2xl text-[12px] leading-relaxed text-[#86868b]">
               The model uses one regional station and rain only. It ignores wind, tide, sun,
               and gull counts, all of which move bacteria. Its job is to be checkable, not to
               replace the lab. Weather © Environment and Climate Change Canada.

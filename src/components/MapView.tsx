@@ -18,10 +18,10 @@ const OCT =
 
 /** Marker glyphs: shape + icon + colour, so status never rides on colour alone. */
 const MARKER_HTML: Record<Status, string> = {
-  open: `<span class="flex size-7 items-center justify-center rounded-full border-2 border-black bg-emerald-400 font-mono text-xs font-bold text-black shadow-md">✓</span>`,
-  advisory: `<span class="flex size-8 items-end justify-center bg-black ${TRI} drop-shadow-md"><span class="flex h-[26px] w-[26px] items-end justify-center pb-[3px] bg-amber-400 ${TRI} font-mono text-[11px] font-bold text-black">!</span></span>`,
-  closed: `<span class="flex size-8 items-center justify-center bg-black ${OCT} drop-shadow-md"><span class="flex size-7 items-center justify-center bg-red-500 ${OCT} font-mono text-[11px] font-bold text-black">✕</span></span>`,
-  season: `<span class="flex size-7 items-center justify-center rounded-[3px] border-2 border-black bg-neutral-500 font-mono text-xs font-bold text-black shadow-md">–</span>`,
+  open: `<span class="flex size-7 items-center justify-center rounded-full border-2 border-black bg-emerald-400 tabular-nums text-xs font-bold text-black shadow-md">✓</span>`,
+  advisory: `<span class="flex size-8 items-end justify-center bg-black ${TRI} drop-shadow-md"><span class="flex h-[26px] w-[26px] items-end justify-center pb-[3px] bg-amber-400 ${TRI} tabular-nums text-[11px] font-bold text-black">!</span></span>`,
+  closed: `<span class="flex size-8 items-center justify-center bg-black ${OCT} drop-shadow-md"><span class="flex size-7 items-center justify-center bg-red-500 ${OCT} tabular-nums text-[11px] font-bold text-black">✕</span></span>`,
+  season: `<span class="flex size-7 items-center justify-center rounded-[3px] border-2 border-black bg-neutral-500 tabular-nums text-xs font-bold text-black shadow-md">–</span>`,
 };
 
 const EVENT_HTML = `<span class="flex size-8 items-center justify-center"><span class="block size-5 rotate-45 rounded-[3px] border-2 border-black bg-white shadow-md"></span></span>`;
@@ -47,7 +47,7 @@ const chip = (on: boolean) =>
     "pointer-events-auto inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-3 text-[12px] font-medium backdrop-blur-xl transition-[background-color,color] duration-200 ease-out",
     on
       ? "border-white/20 bg-white/15 text-white"
-      : "border-white/10 bg-black/40 text-white/45 line-through",
+      : "border-white/10 bg-black/40 text-[#86868b] line-through",
   );
 
 export default function MapView() {
@@ -79,9 +79,8 @@ export default function MapView() {
       <MapContainer center={[44.68, -63.58]} zoom={10} zoomControl={false} scrollWheelZoom className="h-full w-full">
         <ZoomControl position="bottomright" />
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          subdomains="abcd"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           maxZoom={19}
         />
 
@@ -112,14 +111,14 @@ export default function MapView() {
             <Marker key={e.id} position={[e.lat, e.lng]} icon={icon(EVENT_HTML)} title={`Event — ${e.title}`}>
               <Popup>
                 <div className="px-4 pt-3.5 pb-3">
-                  <p className="flex items-center gap-2 text-[10px] font-semibold tracking-[0.12em] text-white/50 uppercase">
+                  <p className="flex items-center gap-2 text-[12px] font-medium text-[#86868b]">
                     <EventMark size="size-2" /> Event
                   </p>
                   <p className="mt-1.5 text-[15px] font-semibold text-white">{e.title}</p>
-                  <p className="font-mono text-[11px] text-white/45">
+                  <p className="tabular-nums text-[11px] text-[#86868b]">
                     {e.when} · {e.time}
                   </p>
-                  <p className="mt-1.5 text-[13px] leading-snug text-white/70">{e.blurb}</p>
+                  <p className="mt-1.5 text-[13px] leading-snug text-[#d2d2d7]">{e.blurb}</p>
                   <Button
                     onClick={() => setOpen(e)}
                     className="mt-3 h-8 w-full rounded-full bg-white text-[12px] font-medium text-black hover:bg-white/90"
@@ -154,31 +153,31 @@ export default function MapView() {
       {open && (
         <div className="absolute inset-y-0 right-0 z-1300 w-full max-w-sm overflow-y-auto border-l border-white/10 bg-[#111]/95 p-6 backdrop-blur-xl">
           <div className="flex items-start justify-between gap-3">
-            <p className="flex items-center gap-2 text-[10px] font-semibold tracking-[0.12em] text-white/50 uppercase">
+            <p className="flex items-center gap-2 text-[12px] font-medium text-[#86868b]">
               <EventMark size="size-2" /> Event
             </p>
-            <Button variant="ghost" size="icon-sm" onClick={() => setOpen(null)} aria-label="Close event details" className="-mt-1 text-white/60">
+            <Button variant="ghost" size="icon-sm" onClick={() => setOpen(null)} aria-label="Close event details" className="-mt-1 text-[#a1a1a6]">
               ✕
             </Button>
           </div>
           <h3 className="mt-3 text-2xl leading-tight font-semibold tracking-tight text-white">{open.title}</h3>
-          <p className="mt-1 font-mono text-[12px] text-white/45">{open.host}</p>
+          <p className="mt-1 tabular-nums text-[12px] text-[#86868b]">{open.host}</p>
           <Separator className="my-4 bg-white/10" />
-          <dl className="space-y-2 font-mono text-[12px]">
+          <dl className="space-y-2 tabular-nums text-[12px]">
             {[
               ["When", `${open.when}, ${open.time}`],
               ["Where", open.near],
               ["Cost", open.price],
             ].map(([k, v]) => (
               <div key={k} className="flex gap-3">
-                <dt className="w-14 shrink-0 text-white/40">{k}</dt>
-                <dd className="text-white/85">{v}</dd>
+                <dt className="w-14 shrink-0 text-[#86868b]">{k}</dt>
+                <dd className="text-[#f5f5f7]">{v}</dd>
               </div>
             ))}
           </dl>
           <Separator className="my-4 bg-white/10" />
-          <p className="text-[14px] leading-relaxed text-white/75">{open.detail}</p>
-          <div className="mt-5 flex items-center justify-between rounded-2xl bg-white/5 p-3 text-[12px] text-white/70">
+          <p className="text-[14px] leading-relaxed text-[#d2d2d7]">{open.detail}</p>
+          <div className="mt-5 flex items-center justify-between rounded-2xl bg-white/5 p-3 text-[12px] text-[#d2d2d7]">
             <span>Water at {open.near}</span>
             <StatusBadge status={BEACHES.find((b) => b.name === open.near)?.status ?? "open"} short />
           </div>
@@ -193,12 +192,12 @@ function BeachCard({ beach }: { beach: Beach }) {
     <div className="px-4 pt-3.5 pb-3">
       <StatusBadge status={beach.status} />
       <p className="mt-2 text-[15px] font-semibold text-white">{beach.name}</p>
-      <p className="font-mono text-[11px] text-white/45 capitalize">{beach.water} beach</p>
+      <p className="tabular-nums text-[11px] text-[#86868b] capitalize">{beach.water} beach</p>
       <div className="mt-3 rounded-xl bg-white/5 px-3 py-2">
-        <p className="font-mono text-[12px] font-semibold text-white">{beach.result}</p>
-        <p className="font-mono text-[10px] text-white/45">{beach.sampled}</p>
+        <p className="tabular-nums text-[12px] font-semibold text-white">{beach.result}</p>
+        <p className="tabular-nums text-[10px] text-[#86868b]">{beach.sampled}</p>
       </div>
-      <p className="mt-2 text-[13px] leading-snug text-white/70">{beach.plain}</p>
+      <p className="mt-2 text-[13px] leading-snug text-[#d2d2d7]">{beach.plain}</p>
     </div>
   );
 }

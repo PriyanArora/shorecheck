@@ -33,12 +33,12 @@ function Row({
     <div className="py-2.5">
       <Badge
         variant="outline"
-        className="h-4 border-white/15 px-1.5 text-[9px] font-semibold tracking-[0.1em] text-white/60 uppercase"
+        className="h-4 border-white/15 px-1.5 text-[10px] font-medium text-[#86868b]"
       >
         {title}
       </Badge>
       <div className="mt-1.5 text-[12.5px] leading-snug text-[#f5f5f7]">{children}</div>
-      <p className="mt-1 font-mono text-[10px] text-white/40">{stamp}</p>
+      <p className="mt-1 tabular-nums text-[10px] text-[#86868b]">{stamp}</p>
     </div>
   );
 }
@@ -84,7 +84,7 @@ export function LakeCard({
   return (
     <div className="px-4 pt-3.5 pb-3">
       <p className="text-[15px] font-semibold text-white">{lake.name}</p>
-      <p className="font-mono text-[10.5px] text-white/45">
+      <p className="tabular-nums text-[10.5px] text-[#86868b]">
         {lake.area_ha} ha · {lake.access}
       </p>
 
@@ -96,7 +96,7 @@ export function LakeCard({
           {weather ? (
             <>
               <span className="font-semibold">{LABEL[weather.label]}</span>
-              <span className="text-white/60">
+              <span className="text-[#a1a1a6]">
                 {" "}· {weather.rain48} mm rain after {weather.dryRunBefore} dry days
               </span>
             </>
@@ -122,10 +122,10 @@ export function LakeCard({
               {latest.type ? ` · ${latest.type}` : ""} (2026)
             </span>
           ) : (
-            <span className="text-white/60">none listed for 2026</span>
+            <span className="text-[#a1a1a6]">none listed for 2026</span>
           )}
           {lake.reports && (
-            <p className="mt-0.5 text-[11px] leading-snug text-white/45">{lake.reports}</p>
+            <p className="mt-0.5 text-[11px] leading-snug text-[#86868b]">{lake.reports}</p>
           )}
         </Row>
         <Separator className="bg-white/10" />
@@ -150,13 +150,13 @@ export function LakeCard({
               <span className={sat.flag ? "font-semibold text-amber-300" : ""}>
                 {sat.flag ? "unvalidated anomaly" : "within baseline"}
               </span>
-              <span className="text-white/60"> · {clearLooks30d(sat.history)} clear looks last 30 d</span>
+              <span className="text-[#a1a1a6]"> · {clearLooks30d(sat.history)} clear looks last 30 d</span>
               <Sparkline history={sat.history} threshold={sat.threshold} />
             </>
           ) : lake.measurable ? (
-            <span className="text-white/60">no series pulled yet</span>
+            <span className="text-[#a1a1a6]">no series pulled yet</span>
           ) : (
-            <span className="text-white/60">
+            <span className="text-[#a1a1a6]">
               too small for satellite ({lake.interior_px20} interior px)
             </span>
           )}
@@ -164,7 +164,7 @@ export function LakeCard({
       </div>
 
       <Separator className="bg-white/10" />
-      <p className="pt-2 font-mono text-[9.5px] text-white/35">
+      <p className="pt-2 tabular-nums text-[9.5px] text-[#6e6e73]">
         Satellite index unvalidated. Not a safety rating.
       </p>
     </div>

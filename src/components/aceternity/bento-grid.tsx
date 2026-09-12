@@ -45,7 +45,7 @@ export function BentoGridItem({
       {header}
       <div className="transition duration-200 group-hover/bento:translate-x-1">
         {eyebrow && (
-          <p className="text-[11px] font-semibold tracking-[0.14em] text-neutral-500 uppercase">
+          <p className="text-[12px] font-medium text-[#86868b]">
             {eyebrow}
           </p>
         )}
