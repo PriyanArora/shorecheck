@@ -1,18 +1,18 @@
 # ShoreCheck
 
-Halifax beach water, told honestly. Official lab results, a rain model that grades itself, a satellite eye on 43 lakes nobody tests, and Hugo to pick your beach.
+Halifax beach water, told honestly. Lab results, a rain model that grades itself, a satellite eye on 43 lakes nobody tests, and Hugo to pick your beach.
 
-The whole idea fits in one sentence: every signal moves at its own speed, so every number on screen carries the time it was taken. A lab sample is a weekly ruling. Weather is hourly. A satellite gets a clear look about every ten days. A bloom can surface in two. We never blend those into one "safe" word, because that word would be a lie.
+Every signal moves at its own speed, so every number on screen carries the time it was taken. A lab sample is a weekly ruling. Weather is hourly. A satellite gets a clear look about every ten days. A bloom can surface in two. We never blend those into one "safe" word, because that word would be a lie.
 
 ## What's inside
 
-**Beaches.** The latest HRM sample at 12 supervised beaches, on a monochrome Leaflet map with a table underneath. Status is shape, colour and a word, never colour alone.
+**Beaches.** The latest HRM sample at 12 supervised beaches, on a monochrome Leaflet map. Status is shape, colour and a word, never colour alone.
 
 **Predict.** Rain over the last 48 hours at Halifax Stanfield, thresholded per water type. Then the model is replayed on the day each beach was sampled and scored against the lab. Right now it's wrong more often than right, and the page says so.
 
 **Lake watch.** Sentinel-2 L1C, `max(MCI, FAI)`, lake median inside a 60 m buffer, flagged against each lake's own baseline (median + 3 MAD). Eight lakes have a series; the rest are outlines with their reported-sighting history. Each card shows the last clear look, days since, clear looks in 30 days, a sparkline, and whether the province's bloom trigger (four warm dry days, then 15 mm) has fired since that look.
 
-**Hugo.** Gemini, fed only the beach and event tables, told to name the status and result every time.
+**Hugo.** Gemini, fed only the beach and event tables, told to name the status every time.
 
 ## Architecture
 
