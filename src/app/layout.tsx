@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -34,18 +33,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${sans.variable} ${mono.variable} dark h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* antivirus extensions stamp bis_* attributes before React hydrates; strip them first */}
+        <script dangerouslySetInnerHTML={{ __html: "(function(){function bad(n){return n.indexOf('bis_')===0||n.indexOf('__processed_')===0;}function s(el){if(!el||!el.attributes)return;for(var i=el.attributes.length-1;i>=0;i--){var n=el.attributes[i].name;if(bad(n))el.removeAttribute(n);}}function all(r){s(r);if(r.querySelectorAll)r.querySelectorAll('*').forEach(s);}try{all(document.documentElement);new MutationObserver(function(m){for(var i=0;i<m.length;i++){var r=m[i];if(r.type==='attributes'){if(bad(r.attributeName))r.target.removeAttribute(r.attributeName);}else r.addedNodes.forEach(all);}}).observe(document.documentElement,{attributes:true,subtree:true,childList:true});}catch(e){}})();" }} />
+      </head>
       <body className="flex min-h-full flex-col bg-black text-[#f5f5f7]" suppressHydrationWarning>
-        {/* Some antivirus browser extensions stamp bis_skin_checked on every div before React
-            hydrates, which trips a hydration warning. Strip it as it appears. */}
-        <Script id="strip-extension-attrs" strategy="beforeInteractive">{`
-(function(){function bad(n){return n.indexOf('bis_')===0||n.indexOf('__processed_')===0;}
-function s(el){if(!el||!el.attributes)return;for(var i=el.attributes.length-1;i>=0;i--){var n=el.attributes[i].name;if(bad(n))el.removeAttribute(n);}}
-function all(root){s(root);if(root.querySelectorAll)root.querySelectorAll('*').forEach(s);}
-try{all(document.documentElement);
-new MutationObserver(function(m){for(var i=0;i<m.length;i++){var r=m[i];if(r.type==='attributes'){if(bad(r.attributeName))r.target.removeAttribute(r.attributeName);}else r.addedNodes.forEach(all);}})
-.observe(document.documentElement,{attributes:true,subtree:true,childList:true});}catch(e){}})();
-        `}</Script>
         {children}
       </body>
     </html>
