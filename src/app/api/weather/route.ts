@@ -10,6 +10,7 @@ export async function GET() {
   const [rows, hourly] = await Promise.all([fetchDaily(16), fetchHourly()]);
   const body: WeatherPayload = {
     ...bloomConditions(rows, hourly),
+    days: rows.slice(-16),
     hourly: { time: hourly.time, airTemp: hourly.airTemp },
     station: "Halifax Stanfield (regional)",
     fetchedAt: new Date().toISOString(),

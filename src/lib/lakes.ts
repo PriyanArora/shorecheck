@@ -59,8 +59,12 @@ export function clearLooks30d(history: HistoryPoint[]): number {
 /** Weather label heuristic, shared by the API and the UI. */
 export type WeatherLabel = "elevated" | "watch" | "normal";
 
+export type WeatherDay = { date: string; tmax: number | null; tmin: number | null; precip: number };
+
 export type WeatherPayload = {
   label: WeatherLabel;
+  /** last 16 complete days, oldest first, so the UI can evaluate rules per lake */
+  days: WeatherDay[];
   rain48: number;
   dryRunBefore: number;
   tmaxDry: number | null;
@@ -95,4 +99,13 @@ export function hhmm(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "--:--";
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
+}
+
+/** Direction of the satellite index over the last three clear looks. */
+export function indexTrend(history: HistoryPoint[]): "rising" | "falling" | "flat" | null {
+  if (history.length < 3) return null;
+  const [a, b, c] = history.slice(-3).map((h) => h.v);
+  if (a < b && b < c) return "rising";
+  if (a > b && b > c) return "falling";
+  return "flat";
 }

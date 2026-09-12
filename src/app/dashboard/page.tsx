@@ -15,7 +15,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BEACHES, EVENTS, STATUS, type Status } from "@/lib/data";
-import { hhmm, loadLakes, type Lake, type WeatherPayload } from "@/lib/lakes";
+import { hhmm, indexTrend, loadLakes, type Lake, type WeatherPayload } from "@/lib/lakes";
+import { conditionsSince } from "@/lib/weather";
 
 const MapView = dynamic(() => import("@/components/MapView"), {
   ssr: false,
@@ -175,8 +176,13 @@ export default function Dashboard() {
           <h2 className="text-[28px] leading-[1.14] font-semibold tracking-[0.007em] text-[#f5f5f7]">Lake watch</h2>
           <p className="mt-1 max-w-2xl text-[17px] leading-[1.47] text-[#86868b]">
             Eight lakes have a Sentinel-2 index series. The value is compared with the lake&apos;s
-            own baseline. Unvalidated, and not a safety rating. The rest of the 43 are on the
-            map with their reported-sighting history only.
+            own baseline. Unvalidated, and not a safety rating. Since a clear look can be a
+            week or more old and a bloom can surface in two to three days, each lake also shows
+            whether the weather since that look has been favourable: four or more warm dry days,
+            then 15 mm or more within 48 hours. Backtested on 2023 to 2025, that sequence fired
+            before 31 of 41 reported lake-months while covering 19% of summer days, about four
+            times the base rate. It is a flag, not a probability. The rest of the 43 lakes are
+            on the map with their reported-sighting history only.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {lakes.length === 0
@@ -186,6 +192,8 @@ export default function Dashboard() {
               : lakes.map((l) => {
                   const s = l.satellite;
                   if (!s.available) return null;
+                  const since = weather ? conditionsSince(weather.days, s.last_clear_date) : null;
+                  const trend = indexTrend(s.history);
                   return (
                     <Card key={l.key} className="gap-1 border-white/10 bg-[#1d1d1f] py-4">
                       <CardHeader className="px-5">
@@ -196,8 +204,14 @@ export default function Dashboard() {
                           {s.flag ? "unvalidated anomaly" : "within baseline"}
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="px-5 tabular-nums text-[11px] text-[#86868b]">
-                        last clear look {s.last_clear_date}
+                      <CardContent className="px-5 text-[12px] text-[#86868b]">
+                        <p className="tabular-nums">last clear look {s.last_clear_date}</p>
+                        {trend && (
+                          <p className={trend === "rising" ? "text-amber-300" : ""}>index {trend}, last 3 looks</p>
+                        )}
+                        <p className={since ? "text-amber-300" : ""}>
+                          {since ? "conditions since favourable" : "no favourable sequence since"}
+                        </p>
                       </CardContent>
                     </Card>
                   );

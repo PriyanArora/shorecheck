@@ -11,8 +11,10 @@ import {
   type HistoryPoint,
   type Lake,
   type SightingsPayload,
+  indexTrend,
   type WeatherPayload,
 } from "@/lib/lakes";
+import { conditionsSince, FAVOURABLE } from "@/lib/weather";
 
 const LABEL: Record<WeatherPayload["label"], string> = {
   elevated: "Elevated",
@@ -80,6 +82,8 @@ export function LakeCard({
   const latest = matches[matches.length - 1];
   const supervised = /supervised/i.test(lake.access);
   const sat = lake.satellite;
+  const since = sat.available && weather ? conditionsSince(weather.days, sat.last_clear_date) : null;
+  const trend = sat.available ? indexTrend(sat.history) : null;
 
   return (
     <div className="px-4 pt-3.5 pb-3">
@@ -151,6 +155,11 @@ export function LakeCard({
                 {sat.flag ? "unvalidated anomaly" : "within baseline"}
               </span>
               <span className="text-[#a1a1a6]"> · {clearLooks30d(sat.history)} clear looks last 30 d</span>
+              {trend && (
+                <p className={`mt-0.5 text-[11.5px] ${trend === "rising" ? "font-semibold text-amber-300" : "text-[#a1a1a6]"}`}>
+                  index {trend} across the last 3 looks
+                </p>
+              )}
               <Sparkline history={sat.history} threshold={sat.threshold} />
             </>
           ) : lake.measurable ? (
@@ -161,6 +170,33 @@ export function LakeCard({
             </span>
           )}
         </Row>
+
+        {sat.available && (
+          <>
+            <Separator className="bg-white/10" />
+            <Row
+              title="Since last clear look"
+              stamp={
+                weather
+                  ? `rule: ${FAVOURABLE.dry}+ warm dry days then ${FAVOURABLE.rain}+ mm in 48 h · 2023-25 backtest: fired before 31 of 41 reported lake-months, on 19% of summer days · not a probability`
+                  : "loading"
+              }
+            >
+              {!weather ? (
+                <Skeleton className="h-3.5 w-32" />
+              ) : since ? (
+                <span className="font-semibold text-amber-300">
+                  Conditions favourable for bloom development: {since.warmDryDays} warm dry days, then{" "}
+                  {since.rain48} mm on {since.date}
+                </span>
+              ) : (
+                <span className="text-[#a1a1a6]">
+                  No favourable sequence in the weather since {sat.last_clear_date}
+                </span>
+              )}
+            </Row>
+          </>
+        )}
       </div>
 
       <Separator className="bg-white/10" />

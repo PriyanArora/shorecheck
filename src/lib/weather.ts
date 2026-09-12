@@ -99,3 +99,36 @@ export function bloomConditions(rows: DailyRow[], hourly: Hourly) {
 
   return { label, rain48, dryRunBefore, tmaxDry, lastCompleteDay };
 }
+
+/**
+ * Bloom-favourable sequence, rule-based, no probability:
+ * >= DRY consecutive days with < 1 mm and tmax >= WARM, then >= RAIN mm within 48 h.
+ * Returns every day the rule fired on (the rain day).
+ */
+export const FAVOURABLE = { warm: 20, dry: 4, rain: 15 } as const;
+
+export type Fired = { date: string; warmDryDays: number; rain48: number };
+
+export function favourableDays(rows: DailyRow[]): Fired[] {
+  const out: Fired[] = [];
+  for (let i = 1; i < rows.length; i++) {
+    const r48 = rows[i].precip + rows[i - 1].precip;
+    if (r48 < FAVOURABLE.rain) continue;
+    let k = rows[i - 1].precip >= 1 ? i - 2 : i - 1;
+    let run = 0;
+    while (k >= 0) {
+      const t = rows[k].tmax;
+      if (rows[k].precip >= 1 || t === null || t < FAVOURABLE.warm) break;
+      run++;
+      k--;
+    }
+    if (run >= FAVOURABLE.dry) out.push({ date: rows[i].date, warmDryDays: run, rain48: Math.round(r48 * 10) / 10 });
+  }
+  return out;
+}
+
+/** Has the favourable sequence fired since a given date (a lake's last clear look)? */
+export function conditionsSince(rows: DailyRow[], since: string): Fired | null {
+  const fired = favourableDays(rows).filter((f) => f.date > since);
+  return fired.length ? fired[fired.length - 1] : null;
+}
