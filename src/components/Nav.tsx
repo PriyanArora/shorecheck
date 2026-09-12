@@ -12,12 +12,11 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-const TREE_URL = "https://halifax-tree-screening.fly.dev/";
-
 const LINKS = [
   { href: "/dashboard", label: "Beaches" },
   { href: "/predict", label: "Predict" },
   { href: "/hugo", label: "Hugo" },
+  { href: "/trees", label: "Trees" },
 ];
 
 export function Wordmark({ className }: { className?: string }) {
@@ -34,11 +33,9 @@ export function Wordmark({ className }: { className?: string }) {
 /**
  * One nav for every page: a clear glass pill floating over the content.
  * Desktop shows the links inline. Phones get a three-line button that opens a sidebar.
- * "Trees" opens the teammate's app in a sheet on this page, never a new tab.
  */
 export function Nav() {
   const path = usePathname();
-  const [trees, setTrees] = useState(false);
   const [menu, setMenu] = useState(false);
 
   const isOn = (href: string) => path === href || path.startsWith(`${href}/`);
@@ -68,15 +65,6 @@ export function Nav() {
                 {l.label}
               </Link>
             ))}
-            <button
-              type="button"
-              onClick={() => setTrees(true)}
-              aria-haspopup="dialog"
-              aria-expanded={trees}
-              className={cn(item, "text-white/75 hover:bg-white/10 hover:text-white")}
-            >
-              Trees
-            </button>
           </nav>
 
           {/* phone: three lines, same height as a nav item */}
@@ -122,47 +110,10 @@ export function Nav() {
                 {l.label}
               </Link>
             ))}
-            <button
-              type="button"
-              onClick={() => {
-                setMenu(false);
-                setTrees(true);
-              }}
-              className="flex h-12 items-center rounded-2xl px-4 text-left text-[17px] font-medium text-white/80 transition-[background-color] duration-200 ease-out hover:bg-white/5"
-            >
-              Trees
-            </button>
           </nav>
         </SheetContent>
       </Sheet>
 
-      {/* teammate's app, in place */}
-      <Sheet open={trees} onOpenChange={setTrees}>
-        <SheetContent
-          side="right"
-          className="w-[min(1100px,96vw)] gap-0 border-white/10 bg-[#0a0a0a] p-0 sm:max-w-none"
-        >
-          <SheetHeader className="border-b border-white/10 px-6 py-4">
-            <SheetTitle className="text-base font-semibold text-white">
-              Which Tree Falls First
-            </SheetTitle>
-            <SheetDescription className="text-[13px] text-[#a1a1a6]">
-              Ranks HRM&apos;s tree-hazard queue so crews go to the branch that will actually hit
-              a house. A teammate&apos;s project, running live inside ShoreCheck in the same
-              black and grey.
-            </SheetDescription>
-          </SheetHeader>
-          {trees && (
-            <iframe
-              src={TREE_URL}
-              title="Halifax Tree Screening"
-              className="h-full w-full flex-1 bg-[#0a0a0a] [filter:grayscale(1)_invert(0.93)_hue-rotate(180deg)_contrast(1.02)_brightness(0.95)]"
-              loading="lazy"
-              referrerPolicy="no-referrer"
-            />
-          )}
-        </SheetContent>
-      </Sheet>
     </>
   );
 }
