@@ -37,20 +37,27 @@ export async function POST(req: Request) {
   if (!turns.length) return Response.json({ error: "empty" }, { status: 400 });
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${key}`;
+  const payload = JSON.stringify({
+    system_instruction: { parts: [{ text: SYSTEM }] },
+    contents: turns.map((t) => ({ role: t.role, parts: [{ text: t.text }] })),
+    generationConfig: { temperature: 0.4, maxOutputTokens: 4096 },
+  });
   try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        system_instruction: { parts: [{ text: SYSTEM }] },
-        contents: turns.map((t) => ({ role: t.role, parts: [{ text: t.text }] })),
-        generationConfig: { temperature: 0.4, maxOutputTokens: 4096 },
-      }),
-      cache: "no-store",
-    });
-    if (!res.ok) {
-      const detail = await res.text();
-      return Response.json({ error: `gemini ${res.status}`, detail: detail.slice(0, 300) }, { status: 502 });
+    // Gemini returns transient 429/5xx under load; retry three times with a short backoff.
+    let res: Response | null = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+        cache: "no-store",
+      });
+      if (res.ok || ![429, 500, 502, 503, 504].includes(res.status)) break;
+      await new Promise((r) => setTimeout(r, 700 * (attempt + 1)));
+    }
+    if (!res || !res.ok) {
+      const detail = res ? (await res.text()).slice(0, 300) : "no response";
+      return Response.json({ error: `gemini ${res?.status ?? "down"}`, detail }, { status: 502 });
     }
     const json = (await res.json()) as {
       candidates?: { content?: { parts?: { text?: string }[] } }[];

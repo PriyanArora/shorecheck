@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { StatusBadge } from "@/components/StatusBadge";
-import { BEACHES, EVENTS, type Beach } from "@/lib/data";
+import { BEACHES, type Beach } from "@/lib/data";
 
 type Msg = { id: number; from: "hugo" | "me"; text: string; beach?: Beach };
 
@@ -23,61 +23,6 @@ const OPENER: Msg = {
   from: "hugo",
   text: "Hey, I'm Hugo. I'll find you a beach that's actually safe to swim at today. First things first — are you after somewhere peaceful, or somewhere happening?",
 };
-
-const pick = (vibe: "peaceful" | "busy") =>
-  BEACHES.find((b) => b.vibe === vibe && b.status === "open")!;
-
-/** Stand-in for the real assistant: keyword match over the same data the map uses. */
-function reply(text: string): Msg {
-  const t = text.toLowerCase();
-  const vibe: "peaceful" | "busy" =
-    /busy|happening|crowd|people|lively|social/.test(t) ? "busy" : "peaceful";
-
-  if (/kid|child|family|toddler/.test(t)) {
-    return {
-      id: Date.now(),
-      from: "hugo",
-      text: "With kids I'd skip anything under advisory. Birch Cove is shallow, warm and tested clean this morning — the safest bet on the Dartmouth side.",
-      beach: BEACHES.find((x) => x.id === "birch-cove")!,
-    };
-  }
-  if (/surf|wave|board/.test(t)) {
-    return {
-      id: Date.now(),
-      from: "hugo",
-      text: "Lawrencetown is the surf answer. Heads up though: it's on advisory after the runoff, so it's fine to surf but I wouldn't put a small kid in the water. There's a beginner lesson Saturday at 9.",
-      beach: BEACHES.find((x) => x.id === "lawrencetown")!,
-    };
-  }
-  if (/downtown|close|near|walk|no car|bus/.test(t)) {
-    return {
-      id: Date.now(),
-      from: "hugo",
-      text: "Closest clean water to downtown is Chocolate Lake — fifteen minutes on the 9 bus, open today at 18 CFU. There's a sunset kayak meetup there tonight at 6:30 if you want company.",
-      beach: BEACHES.find((x) => x.id === "chocolate-lake")!,
-    };
-  }
-  if (/closed|advisory|safe|sick|bacteria|quality/.test(t)) {
-    return {
-      id: Date.now(),
-      from: "hugo",
-      text: "Penhorn is the only hard closure right now — 640 CFU, which is well past the limit, so don't get in. Albro is on advisory. Everything else on my map tested clean.",
-      beach: BEACHES.find((x) => x.status === "closed")!,
-    };
-  }
-
-  const b = pick(vibe);
-  const ev = EVENTS.find((e) => e.near === b.name);
-  return {
-    id: Date.now(),
-    from: "hugo",
-    text:
-      vibe === "busy"
-        ? `Then ${b.name} is your spot — clean water today and always a crowd.${ev ? ` ${ev.title} is on ${ev.when.toLowerCase()}, ${ev.time}.` : ""} Want me to check somewhere closer to you?`
-        : `Go to ${b.name}. It tested clean, it's quiet on weekdays and nobody's fighting you for a patch of sand.${ev ? ` ${ev.title} runs there ${ev.when.toLowerCase()} if you change your mind about quiet.` : ""}`,
-    beach: b,
-  };
-}
 
 export function HugoChat({ compact = false }: { compact?: boolean }) {
   const [msgs, setMsgs] = useState<Msg[]>([OPENER]);
@@ -122,9 +67,19 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
           beach: j.beachId ? BEACHES.find((b) => b.id === j.beachId) : undefined,
         },
       ]);
-    } catch {
-      // Gemini unavailable: fall back to the keyword matcher over the same data
-      setMsgs((m) => [...m, reply(text)]);
+    } catch (e) {
+      const why = e instanceof Error ? e.message : "unknown";
+      setMsgs((m) => [
+        ...m,
+        {
+          id: nextId(),
+          from: "hugo",
+          text:
+            why === "503"
+              ? "Gemini isn't configured on this server yet. Add GEMINI_API_KEY and try again."
+              : "I couldn't reach Gemini just now. Give it a second and send that again.",
+        },
+      ]);
     } finally {
       setTyping(false);
     }
