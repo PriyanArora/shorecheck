@@ -148,14 +148,15 @@ export function Nav() {
             </SheetTitle>
             <SheetDescription className="text-[13px] text-[#a1a1a6]">
               Ranks HRM&apos;s tree-hazard queue so crews go to the branch that will actually hit
-              a house. A teammate&apos;s project, running live inside ShoreCheck.
+              a house. A teammate&apos;s project, running live inside ShoreCheck in the same
+              black and grey.
             </SheetDescription>
           </SheetHeader>
           {trees && (
             <iframe
               src={TREE_URL}
               title="Halifax Tree Screening"
-              className="h-full w-full flex-1 bg-white"
+              className="h-full w-full flex-1 bg-[#0a0a0a] [filter:grayscale(1)_invert(0.93)_hue-rotate(180deg)_contrast(1.02)_brightness(0.95)]"
               loading="lazy"
               referrerPolicy="no-referrer"
             />
