@@ -28,13 +28,13 @@ export default function TreesPage() {
             src={TREE_URL}
             title="Halifax Tree Screening"
             allow="geolocation; fullscreen"
-            className="block h-[calc(100dvh-7rem)] min-h-[560px] w-full bg-[#0a0a0a] sm:h-[80vh]"
+            className="block h-[calc(100dvh-7rem)] min-h-[560px] w-full bg-[#0a0a0a] [filter:grayscale(1)_invert(0.93)_hue-rotate(180deg)_contrast(1.02)_brightness(0.95)] sm:h-[80vh]"
             referrerPolicy="no-referrer"
           />
         </div>
         <p className="mt-3 text-[12px] text-[#6e6e73]">
-          The tool is served from the team&apos;s own app. On a phone, draw the area inside the
-          frame; the page around it stays put.
+          Shown in ShoreCheck&apos;s black and grey. The tool is served from the team&apos;s own
+          app; on a phone, draw the area inside the frame.
         </p>
       </main>
     </>
