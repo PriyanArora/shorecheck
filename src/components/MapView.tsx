@@ -75,7 +75,7 @@ export default function MapView() {
   const beaches = BEACHES.filter((b) => shown.includes(b.status));
 
   return (
-    <div className="relative h-[62vh] min-h-[420px] w-full overflow-hidden bg-[#0a0a0a]">
+    <div className="relative isolate z-0 h-[62vh] min-h-[420px] w-full overflow-hidden bg-[#0a0a0a]">
       <MapContainer center={[44.68, -63.58]} zoom={10} zoomControl={false} scrollWheelZoom className="h-full w-full">
         <ZoomControl position="bottomright" />
         <TileLayer
