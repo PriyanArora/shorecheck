@@ -1,0 +1,56 @@
+You are designing the UI for a hackathon product called ShoreCheck.
+
+WHAT IT IS
+ShoreCheck shows the official water quality status of Halifax's supervised
+beaches on a map, along with local events happening near those beaches, plus
+a chat assistant named Hugo who recommends a beach based on where you are,
+when you are going, and whether you want somewhere peaceful or somewhere
+busy. It is a Next.js site with Tailwind, deployed on Vercel.
+
+THREE SCREENS
+
+1. Landing page. Navbar: ShoreCheck wordmark on the left, two links on the
+right, "Dashboard" and "Talk to Hugo". Hero is a left/right split. Left side
+is the product name and a one line pitch: "Want to know the perfect beach to
+go to based on your preferences? We got you." Right side is an iOS style
+phone frame containing a static screenshot of the dashboard. The phone is
+decorative, not interactive.
+
+2. Dashboard. A map of the Halifax region taking most of the viewport. Beach
+markers colored by water quality status, four states: open, advisory,
+closed, closed for season. Event markers in a visually distinct shape.
+Clicking a beach marker opens a small card with its status, the raw test
+result, and a plain language line. Clicking an event marker opens a short
+blurb with a control that expands into a full event panel. Below the map, a
+scrollable row or grid of upcoming event cards.
+
+3. Hugo. A single column chat interface. Hugo's opening message asks whether
+the user wants somewhere peaceful or somewhere happening, offered as two
+tappable chips, then it continues as ordinary text chat.
+
+BEFORE YOU DESIGN ANYTHING, INTERROGATE ME
+Ask your questions in batches of no more than three at a time, as
+multiple-choice option boxes rather than open prose questions, with a short
+"other, let me type it" escape on each. Keep going until you can design
+confidently. Then summarise what you have concluded and wait for me to
+confirm before you produce a single screen.
+
+Cover at least: overall mood and any reference products; how literal the
+coastal theme should be; light mode, dark mode, or both; palette beyond the
+four fixed status colours; typography; map tile style and how much UI chrome
+floats over the map; density versus whitespace; how Hugo is personified
+(avatar, name treatment, tone of his messages); mobile behaviour; and what
+"finished" looks like given the whole thing has to be built in about three
+hours.
+
+CONSTRAINTS YOU MUST RESPECT
+- Tailwind utility classes only. No custom design tokens I would have to
+  wire up by hand.
+- The map is react-leaflet with OpenStreetMap tiles, so the base map style
+  is largely fixed. Design around it, not for a custom styled basemap.
+- No illustrations that would need a designer to draw.
+- Status must never be carried by colour alone. Pair every status colour
+  with a shape, icon or text label so it stays readable for colourblind
+  users. This is a public health signal.
+- Everything must degrade to a single column on mobile without a separate
+  layout.
