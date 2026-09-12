@@ -14,6 +14,8 @@ Every signal moves at its own speed, so every number on screen carries the time 
 
 **Hugo.** Gemini, fed only the beach and event tables, told to name the status every time.
 
+**Trees.** The same satellite, pointed at the canopy. Sentinel-2 L2A NDVI over seven HRM parks, vegetated pixels only, median of the last 45 days against the same weeks in the two prior summers. A park much less green than its own past is a stress signal, dated like everything else.
+
 ## Architecture
 
 ```mermaid
