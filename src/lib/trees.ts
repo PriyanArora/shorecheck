@@ -50,6 +50,8 @@ export type TreeHealthPayload = {
   source: string;
   parks: ParkHealth[];
   rule: string;
+  snapshot?: boolean;
+  snapshotReason?: string;
 };
 
 export function labelFor(anomaly: number | null): CanopyLabel | null {

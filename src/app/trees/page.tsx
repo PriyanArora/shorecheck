@@ -150,7 +150,7 @@ export default function TreesPage() {
             ["Parks watched", data ? String(data.parks.length) : null],
             ["Flagged below usual", data ? String(stressed) : null],
             ["Latest clear look", latest ?? (data ? "none" : null)],
-            ["Fetched", data ? hhmm(data.fetchedAt) : null],
+            [data?.snapshot ? "Snapshot from" : "Fetched", data ? `${data.fetchedAt.slice(5, 10)} ${hhmm(data.fetchedAt)}` : null],
           ].map(([k, v]) => (
             <Card key={k} className="gap-1 border-white/10 bg-[#1d1d1f] py-4">
               <CardHeader className="px-5">
@@ -166,6 +166,13 @@ export default function TreesPage() {
             </Card>
           ))}
         </div>
+
+        {data?.snapshot && (
+          <p className="mt-4 text-[13px] text-[#86868b]">
+            Showing the last live reading, saved {data.fetchedAt.slice(0, 10)}. This server has no
+            satellite credentials, so it is not refreshing.
+          </p>
+        )}
 
         {error && (
           <Card className="mt-6 border-red-400/30 bg-[#1d1d1f] py-4">

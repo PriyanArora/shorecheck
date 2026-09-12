@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { cdseConfigured, ndviDaily, type Interval } from "@/lib/cdse";
 import { labelFor, median, PARKS, type Look, type ParkHealth, type TreeHealthPayload } from "@/lib/trees";
 
@@ -67,10 +69,19 @@ async function compute(): Promise<TreeHealthPayload> {
   };
 }
 
-export async function GET(req: Request) {
-  if (!cdseConfigured()) {
-    return Response.json({ error: "COPERNICUS_CLIENT_ID / COPERNICUS_CLIENT_SECRET not set" }, { status: 503 });
+/** Last live reading, committed to the repo, so the page still shows real data where no credentials are set. */
+async function snapshot(reason: string): Promise<Response> {
+  try {
+    const raw = await readFile(path.join(process.cwd(), "public", "data", "tree_health.json"), "utf8");
+    const body = JSON.parse(raw) as TreeHealthPayload;
+    return Response.json({ ...body, snapshot: true, snapshotReason: reason });
+  } catch {
+    return Response.json({ error: reason }, { status: 503 });
   }
+}
+
+export async function GET(req: Request) {
+  if (!cdseConfigured()) return snapshot("COPERNICUS credentials not set on this server");
   const refresh = new URL(req.url).searchParams.has("refresh");
   if (!refresh && cache && Date.now() - cache.at < CACHE_MS) return Response.json(cache.body);
   if (!inflight) {
@@ -86,6 +97,6 @@ export async function GET(req: Request) {
   try {
     return Response.json(await inflight);
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : "failed" }, { status: 502 });
+    return snapshot(e instanceof Error ? e.message : "failed");
   }
 }
