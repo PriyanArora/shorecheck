@@ -178,7 +178,7 @@ export function LakeCard({
               title="Since last clear look"
               stamp={
                 weather
-                  ? `rule: ${FAVOURABLE.dry}+ warm dry days then ${FAVOURABLE.rain}+ mm in 48 h · 2023-25 backtest: fired before 31 of 41 reported lake-months, on 19% of summer days · not a probability`
+                  ? `province's stated trigger: ${FAVOURABLE.dry}+ warm dry days then ${FAVOURABLE.rain}+ mm in 48 h · no measurable skill in our 2021-26 backtest · context, not a prediction`
                   : "loading"
               }
             >

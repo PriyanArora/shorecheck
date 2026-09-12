@@ -179,10 +179,11 @@ export default function Dashboard() {
             own baseline. Unvalidated, and not a safety rating. Since a clear look can be a
             week or more old and a bloom can surface in two to three days, each lake also shows
             whether the weather since that look has been favourable: four or more warm dry days,
-            then 15 mm or more within 48 hours. Backtested on 2023 to 2025, that sequence fired
-            before 31 of 41 reported lake-months while covering 19% of summer days, about four
-            times the base rate. It is a flag, not a probability. The rest of the 43 lakes are
-            on the map with their reported-sighting history only.
+            then 15 mm or more within 48 hours. That is the province&apos;s stated trigger. We
+            tested it against 647 satellite looks from 2021 to 2026 and found no measurable
+            skill: looks after a trigger were above baseline 8.7% of the time, other looks 8.0%.
+            So the badge is context about how stale the last look is, not a prediction. The
+            rest of the 43 lakes are on the map with their reported-sighting history only.
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {lakes.length === 0
