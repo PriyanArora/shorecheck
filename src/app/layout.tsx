@@ -27,16 +27,16 @@ const mono = localFont({
 export const metadata: Metadata = {
   title: "ShoreCheck — Halifax beach water quality",
   description:
-    "Official water quality status for Halifax's supervised beaches, events nearby, and Hugo, who picks the beach for you.",
+    "Official water quality for Halifax's supervised beaches, a rain-driven prediction you can check against the tests, a satellite watch on 43 lakes, and Hugo to pick a beach for you.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${mono.variable} h-full antialiased`}
+      className={`${sans.variable} ${mono.variable} dark h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-stone-50 text-slate-900">
+      <body className="flex min-h-full flex-col bg-black text-[#f5f5f7]">
         {children}
       </body>
     </html>

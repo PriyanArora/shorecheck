@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { StatusChip } from "@/components/StatusMark";
+import { StatusBadge } from "@/components/StatusBadge";
 import { BEACHES, EVENTS, type Beach } from "@/lib/data";
 
 type Msg = { id: number; from: "hugo" | "me"; text: string; beach?: Beach };
@@ -100,27 +100,27 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
           m.from === "hugo" ? (
             <div key={m.id} className="flex gap-2">
               <span
-                className={`mt-0.5 grid shrink-0 place-items-center rounded-full bg-sky-800 font-bold text-white ${avatar}`}
+                className={`mt-0.5 grid shrink-0 place-items-center rounded-full bg-white font-bold text-black ${avatar}`}
               >
                 H
               </span>
               <div className="max-w-[85%]">
-                <p className="text-[10px] font-semibold text-sky-900/60">Hugo</p>
+                <p className="text-[10px] font-semibold text-white/50">Hugo</p>
                 <div
-                  className={`mt-1 rounded-2xl rounded-tl-sm bg-white/90 px-3 py-2 leading-snug text-slate-800 ring-1 ring-[#e7d6b3] ${body}`}
+                  className={`mt-1 rounded-2xl rounded-tl-sm bg-[#1d1d1f] px-3 py-2 leading-snug text-[#f5f5f7] ring-1 ring-white/10 ${body}`}
                 >
                   {m.text}
                 </div>
                 {m.beach && (
-                  <div className="mt-2 rounded-2xl bg-white/90 p-2.5 ring-1 ring-[#e7d6b3]">
-                    <StatusChip status={m.beach.status} />
+                  <div className="mt-2 rounded-2xl bg-[#1d1d1f] p-2.5 ring-1 ring-white/10">
+                    <StatusBadge status={m.beach.status} short />
                     <p className="mt-1.5 text-[13px] font-bold">
                       {m.beach.name}
                     </p>
-                    <p className="font-mono text-[10px] text-slate-500">
+                    <p className="font-mono text-[10px] text-white/50">
                       {m.beach.result}
                     </p>
-                    <p className="mt-1 text-[11px] leading-snug text-slate-600">
+                    <p className="mt-1 text-[11px] leading-snug text-white/70">
                       {m.beach.plain}
                     </p>
                   </div>
@@ -130,7 +130,7 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
           ) : (
             <div key={m.id} className="flex justify-end">
               <div
-                className={`max-w-[85%] rounded-2xl rounded-tr-sm bg-sky-800 px-3 py-2 leading-snug text-white ${body}`}
+                className={`max-w-[85%] rounded-2xl rounded-tr-sm bg-white px-3 py-2 leading-snug text-black ${body}`}
               >
                 {m.text}
               </div>
@@ -144,7 +144,7 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
               <button
                 key={c}
                 onClick={() => send(c)}
-                className="rounded-full bg-white/90 px-3 py-1.5 text-[12px] font-semibold text-sky-900 ring-1 ring-sky-200 hover:bg-sky-50"
+                className="rounded-full bg-white/10 px-3 py-1.5 text-[12px] font-semibold text-white ring-1 ring-white/15 hover:bg-white/20"
               >
                 {c}
               </button>
@@ -153,7 +153,7 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
         )}
 
         {typing && (
-          <p className="pl-8 text-[11px] text-sky-900/50">Hugo is typing…</p>
+          <p className="pl-8 text-[11px] text-white/40">Hugo is typing…</p>
         )}
         <div ref={end} />
       </div>
@@ -163,19 +163,19 @@ export function HugoChat({ compact = false }: { compact?: boolean }) {
           e.preventDefault();
           send(draft);
         }}
-        className={`flex gap-2 border-t border-[#e7d6b3] bg-[#f4ecdd]/90 px-3 pt-2.5 backdrop-blur ${compact ? "pb-5" : "pb-3"}`}
+        className={`flex gap-2 border-t border-white/10 bg-black/80 px-3 pt-2.5 backdrop-blur ${compact ? "pb-5" : "pb-3"}`}
       >
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder="Ask Hugo anything…"
           aria-label="Message Hugo"
-          className={`min-w-0 flex-1 rounded-full bg-white px-3 py-2 ring-1 ring-[#e7d6b3] outline-none placeholder:text-slate-400 focus:ring-sky-600 ${body}`}
+          className={`min-w-0 flex-1 rounded-full bg-[#1d1d1f] px-3 py-2 text-white ring-1 ring-white/10 outline-none placeholder:text-white/40 focus:ring-white/40 ${body}`}
         />
         <button
           type="submit"
           disabled={!draft.trim()}
-          className="rounded-full bg-sky-800 px-4 py-2 text-[13px] font-semibold text-white hover:bg-sky-700 disabled:opacity-40"
+          className="rounded-full bg-white px-4 py-2 text-[13px] font-semibold text-black hover:bg-white/90 disabled:opacity-40"
         >
           Send
         </button>
