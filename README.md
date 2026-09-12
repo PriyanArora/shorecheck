@@ -17,18 +17,53 @@ Every signal moves at its own speed, so every number on screen carries the time 
 ## Architecture
 
 ```mermaid
-flowchart LR
-  UI[Next.js 16 · React 19 · Tailwind 4 · shadcn · react-leaflet] --> W[/api/weather]
-  UI --> P[/api/predict]
-  UI --> S[/api/sightings]
-  UI --> H[/api/hugo]
-  UI --> J[(lakes.json · 43 polygons · 8 index series)]
-  W & P --> ECCC[ECCC GeoMet · station 8202251]
-  S --> NS[novascotia.ca algae list]
-  H --> G[Gemini]
+flowchart TB
+  subgraph client["Client · React 19, Tailwind 4, shadcn/ui, react-leaflet"]
+    dash["/dashboard"]
+    pred["/predict"]
+    hugo["/hugo"]
+    trees["/trees"]
+  end
+
+  subgraph server["Server · Next.js 16 App Router"]
+    direction LR
+    subgraph api["Route handlers · in-memory cache"]
+      weather["api/weather"]
+      predict["api/predict"]
+      sightings["api/sightings"]
+      hugoapi["api/hugo"]
+    end
+    subgraph lib["src/lib · pure functions"]
+      weatherlib["weather.ts"]
+      predictlib["predict.ts"]
+      lakeslib["lakes.ts"]
+      data["data.ts"]
+    end
+    lakesjson[("public/data/lakes.json")]
+  end
+
+  subgraph ext["External"]
+    eccc["ECCC GeoMet"]
+    ns["novascotia.ca"]
+    gemini["Gemini API"]
+    osm["OpenStreetMap tiles"]
+    tree["halifax-tree-screening.fly.dev"]
+  end
+
+  dash --> weather & sightings & lakesjson
+  dash --> osm
+  pred --> predict
+  hugo --> hugoapi
+  trees -. iframe .-> tree
+
+  weather --> weatherlib --> eccc
+  predict --> weatherlib & predictlib & data
+  sightings --> ns
+  hugoapi --> data --> gemini
+  dash --> lakeslib
 ```
 
-Route handlers are plain `GET`/`POST` functions with a module-level cache. Pure logic sits in `src/lib`. The satellite pull happened once, offline, and ships as static JSON. Only Gemini needs a key.
+Route handlers are plain `GET`/`POST` functions with a module-level cache. Logic in `src/lib` is pure and shared by server and client. The satellite pull ran once, offline, and ships as static JSON. Only Gemini needs a key.
 
 ## What the math says
 
